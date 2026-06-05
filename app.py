@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 #import os
 import dotenv
+
 from routes.chat_routes import register_chat_routes
 
 dotenv.load_dotenv()
