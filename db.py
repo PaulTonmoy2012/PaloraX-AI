@@ -6,4 +6,7 @@ client = MongoClient(MONGO_URI)
 #accessing the database as db
 db = client[DATABASE_NAME]
 
+
 conversations_collection = db["conversations"]
+users_collection = db["users"]
+user_memories_collection = db["user_memories"]

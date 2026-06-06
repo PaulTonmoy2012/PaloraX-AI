@@ -4,16 +4,24 @@ from flask_cors import CORS
 #import os
 import dotenv
 
+from config import SECRET_KEY
+from routes.auth_routes import register_auth_routes
+from routes.conversation_routes import register_conversation_routes
 from routes.chat_routes import register_chat_routes
 
 dotenv.load_dotenv()
+
+
 #flask install
   
 app = Flask(__name__)
-CORS(app)
+CORS(app,supports_credentials=True)
+app.secret_key = SECRET_KEY
 
 #resgister_chat_route
 register_chat_routes(app)
+register_auth_routes(app)
+register_conversation_routes(app)
 
 @app.route('/',methods=['GET'])
 def home():
