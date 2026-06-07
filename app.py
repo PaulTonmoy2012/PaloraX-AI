@@ -2,12 +2,16 @@ from flask import Flask, request, jsonify
 #from pymongo import MongoClient
 from flask_cors import CORS
 #import os
+
 import dotenv
 
 from config import SECRET_KEY
 from routes.auth_routes import register_auth_routes
 from routes.conversation_routes import register_conversation_routes
 from routes.chat_routes import register_chat_routes
+from routes.memory_routes import register_memory_routes
+from routes.analytics_routes import register_analytics_routes 
+
 
 dotenv.load_dotenv()
 
@@ -15,13 +19,22 @@ dotenv.load_dotenv()
 #flask install
   
 app = Flask(__name__)
-CORS(app,supports_credentials=True)
+CORS(
+    app,
+    supports_credentials=True,
+    origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+)
 app.secret_key = SECRET_KEY
 
 #resgister_chat_route
 register_chat_routes(app)
 register_auth_routes(app)
 register_conversation_routes(app)
+register_memory_routes(app)
+register_analytics_routes(app)
 
 @app.route('/',methods=['GET'])
 def home():
@@ -49,4 +62,4 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5002)

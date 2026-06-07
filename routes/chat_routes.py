@@ -47,7 +47,9 @@ def register_chat_routes(app):
             final_conversation_id = conversation_id
         user_memory = get_user_memory(user_id)
         # Send current message + previous history to Gemini
+        
         ai_reply = generate_gemini_reply(user_message,conversation_history,user_memory)
+       
 
         now = datetime.now(timezone.utc)
 

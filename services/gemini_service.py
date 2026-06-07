@@ -8,6 +8,7 @@ if not GEMINI_API_KEY:
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
+
 def build_prompt(user_message, conversation_history=None, user_memory=None):
     """
     Builds a prompt that includes previous conversation context.
@@ -57,7 +58,8 @@ def generate_gemini_reply(user_message, conversation_history=None, user_memory=N
     prompt=build_prompt(user_message, conversation_history, user_memory)
     
     response = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents= prompt
-    )
+            model="gemini-3.1-flash-lite",
+            contents= prompt
+        )
     return response.text
+    

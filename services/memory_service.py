@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 
 from google import genai
 
+
 from config import GEMINI_API_KEY
 from db import user_memories_collection
 
@@ -72,7 +73,7 @@ User message:
 {user_message}
 """
     response = client.models.generate_content(
-        model="gemini-3.5-flash",
+        model="gemini-3.1-flash-lite",
         contents=prompt
     )
 
