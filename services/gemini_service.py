@@ -1,7 +1,9 @@
 import os
 #from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 from config import GEMINI_API_KEY
+from services.agent_tools import get_location, get_weather
 
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY is missing from .env file")
@@ -24,6 +26,17 @@ You are PaloraX AI, a helpful AI assistant.
 Answer clearly and politely.
 Use the known user memory if it can be really helpful in answering the user's question.
 Use the previous conversation context when it is provided.
+Use known user memory if it is helpful.
+Use previous conversation context if it is provided.
+
+Weather tool rules:
+- If the user asks about weather, temperature, rain, wind, humidity, or forecast for a city, use tools.
+- First use get_location(city) to get latitude and longitude.
+- Then use get_weather(latitude, longitude) to get today's weather.
+- Do not invent weather data.
+- If the user asks for weather but does not mention a city, ask which city they mean.
+	- Final weather answers should be short, practical, and to the point.
+
 If the answer is not available from the conversation, say that you do not know yet.
 """
 
@@ -58,8 +71,13 @@ def generate_gemini_reply(user_message, conversation_history=None, user_memory=N
     prompt=build_prompt(user_message, conversation_history, user_memory)
     
     response = client.models.generate_content(
-            model="gemini-3.1-flash-lite",
-            contents= prompt
+            model="gemini-2.5-flash-lite",
+            contents= prompt,
+            config=types.GenerateContentConfig(
+            tools=[
+                get_location,
+                get_weather,])
+
         )
     return response.text
     
